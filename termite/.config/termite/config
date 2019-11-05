@@ -41,8 +41,8 @@ scrollback_lines = 10000
 #scrollbar = off
 
 [colors]
-foreground          = #C6CCED
-foreground_bold     = #C6CCED
+foreground          = #FFFFFF
+foreground_bold     = #FFFFFF
 cursor              = #737A9C
 cursor_foreground   = #C6CCED
 background          = #292D3E
