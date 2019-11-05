@@ -48,9 +48,5 @@ PS1+="\e[94m \w> "
 PS1+="\[$COLOR_RESET\]"   # '#' for root, else '$'
 export PS1
 
-
-#powerline-daemon -q
-#POWERLINE_BASH_CONTINUATION=1
-#POWERLINE_BASH_SELECT=1
-#. /usr/share/powerline/bindings/bash/powerline.sh
-
+alias c='clear'
+alias fuck='sudo !!'
