@@ -44,7 +44,7 @@ function git_branch {
 PS1="\[\e[97;45m\]\033[1m \u \e[m\]\[\e[35;40m\]\[\e[m\]"
 PS1+="\[\$(git_color)\]"        # colors git status
 PS1+="\$(git_branch)"           # prints current branch
-PS1+="\e[94m\w$ " 
+PS1+="\e[94m \w$ " 
 PS1+="\[$COLOR_RESET\]"   # '#' for root, else '$'
 export PS1
 
