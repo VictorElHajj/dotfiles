@@ -15,6 +15,14 @@ COLOR_BLUE="\033[0;34m"
 COLOR_WHITE="\033[0;37m"
 COLOR_RESET="\033[0m"
 
+function exit_code {
+ if [[ $? != 0 ]]; then
+    echo -e "$COLOR_RED"
+ else
+    echo -e "\033[95m"
+  fi
+}
+
 function git_color {
   local git_status="$(git status 2> /dev/null)"
 
@@ -41,7 +49,10 @@ function git_branch {
   fi
 }
 
-PS1="\[\e[97;45m\]\033[1m \u \e[m\]\[\e[35;40m\]\[\e[m\]"
+
+PS1="\[\e[97;45m\]\033[1m \u "
+PS1+="\[\$(exit_code)\]"        # colors git status
+PS1+="\[\e[40m\]\[\e[m\]"
 PS1+="\[\$(git_color)\]"        # colors git status
 PS1+="\$(git_branch)"           # prints current branch
 PS1+="\e[94m \w> "
@@ -50,3 +61,6 @@ export PS1
 
 alias c='clear'
 alias fuck='sudo $(history -p \!\!)'
+
+. /usr/share/fzf/key-bindings.bash
+. /usr/share/fzf/completion.bash
