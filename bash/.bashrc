@@ -49,4 +49,4 @@ PS1+="\[$COLOR_RESET\]"   # '#' for root, else '$'
 export PS1
 
 alias c='clear'
-alias fuck='sudo !!'
+alias fuck='sudo $(history -p \!\!)'
