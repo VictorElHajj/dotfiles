@@ -35,14 +35,10 @@ color=#E0E0E0
 # The first parameter sets the step (and units to display)
 # The second parameter overrides the mixer selection
 # See the script for details.
-#[volume]
-#label=
-#instance=Master
-#instance=PCM
-#interval=1
-#signal=10
-
-#
+[volume]
+label=
+interval=1
+signal=1
 # If the instance is not specified, use the interface used for default route.
 # The address can be forced to IPv4 or IPv6 with -4 or -6 switches.
 [iface]
