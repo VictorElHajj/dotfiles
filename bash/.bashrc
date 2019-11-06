@@ -7,59 +7,9 @@
 
 alias ls='ls --color=auto'
 
-COLOR_RED="\033[0;31m"
-COLOR_YELLOW="\033[0;33m"
-COLOR_GREEN="\033[0;32m"
-COLOR_OCHRE="\033[38;5;95m"
-COLOR_BLUE="\033[0;34m"
-COLOR_WHITE="\033[0;37m"
-COLOR_RESET="\033[0m"
-
-function exit_code {
- if [[ $? != 0 ]]; then
-    echo -e "$COLOR_RED"
- else
-    echo -e "\033[95m"
-  fi
-}
-
-function git_color {
-  local git_status="$(git status 2> /dev/null)"
-
-  if [[ $git_status =~ "Your branch is ahead of" ]]; then
-    echo -e $COLOR_YELLOW
-  elif [[ $git_status =~ "nothing to commit" ]]; then
-    echo -e $COLOR_GREEN
-  else
-    echo -e $COLOR_RED
-  fi
-}
-
-function git_branch {
-  local git_status="$(git status 2> /dev/null)"
-  local on_branch="On branch ([^${IFS}]*)"
-  local on_commit="HEAD detached at ([^${IFS}]*)"
-
-  if [[ $git_status =~ $on_branch ]]; then
-    local branch=${BASH_REMATCH[1]}
-    echo " $branch"
-  elif [[ $git_status =~ $on_commit ]]; then
-    local commit=${BASH_REMATCH[1]}
-    echo " $commit"
-  fi
-}
-
-
-PS1="\[\e[97;45m\]\033[1m \u "
-PS1+="\[\$(exit_code)\]"        # colors git status
-PS1+="\[\e[40m\]\[\e[m\]"
-PS1+="\[\$(git_color)\]"        # colors git status
-PS1+="\$(git_branch)"           # prints current branch
-PS1+="\e[94m \w> "
-PS1+="\[$COLOR_RESET\]"   # '#' for root, else '$'
-export PS1
-
 function prompt_command {
+    # Has to check this first as any other command will change its value
+    local EXIT_CODE=$? 
     # FG
     #local FG_BLACK="\e[30m"
     local FG_RED="\e[31m"
@@ -79,7 +29,7 @@ function prompt_command {
     local FG_WHITE="\e[97m"
     # BG
     local BG_BLACK="\e[40m"
-    #local BG_RED="\e[41m"
+    local BG_RED="\e[41m"
     #local BG_GREEN="\e[42m"
     #local BG_YELLOW="\e[43m"
     #local BG_BLUE="\e[44m"
@@ -98,21 +48,33 @@ function prompt_command {
     local O_BOLD="\e[1m"
     local O_RESET="\e[0m"
     
-    # Main prompt
+    # Main prompt 
+    # Red name if last command had exit code. Normal otherwise. 
+    if [[ $EXIT_CODE != 0 ]]; then
+        PS1="\[$BG_RED$O_BOLD$FG_WHITE\]"
+    else
+        PS1="\[$BG_MAGENTA$O_BOLD$FG_WHITE\]"
+    fi
     # Username
-    PS1="$O_BOLD$FG_WHITE$BG_MAGENTA \u "
+    PS1+=" \u "
     # Arrow
-    PS1+="$FG_MAGENTA$BG_BLACK$O_RESET"
+    # FG color here should be same as BG exit code color.
+    if [[ $EXIT_CODE != 0 ]]; then
+        PS1+="\[$FG_RED$O_BOLD$BG_BLACK\]"
+    else
+        PS1+="\[$FG_MAGENTA$BG_BLACK\]"
+    fi    
+    PS1+="\[$O_RESET\]"
     
     # Git
     # Git Color
     local git_status="$(git status 2> /dev/null)"
     if [[ $git_status =~ "Your branch is ahead of" ]]; then
-        PS1+="$FG_YELLOW"
+        PS1+="\[$FG_YELLOW\]"
     elif [[ $git_status =~ "nothing to commit" ]]; then
-        PS1+="$FG_GREEN"
+        PS1+="\[$FG_GREEN\]"
     else
-        PS1+="$FG_RED"
+        PS1+="\[$FG_RED\]"
     fi
     # Git branch name. (Won't work for detached)
     local git_status="$(git status 2> /dev/null)"
@@ -124,7 +86,7 @@ function prompt_command {
     
     # Continue main prompt
     # Current directory and >
-    PS1+="$FG_LBLUE \w> $O_RESET"
+    PS1+="\[$FG_LBLUE\] \w> \[$O_RESET\]"
     export PS1
 
 }
