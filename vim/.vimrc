@@ -10,11 +10,20 @@ call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'https://github.com/rafi/awesome-vim-colorschemes'
 Plug 'https://github.com/drewtempelmeyer/palenight.vim'
+Plug 'https://github.com/nbouscal/vim-stylish-haskell'
 " Initialize plugin system
 call plug#end()
 
+filetype plugin indent on
+
+set undofile
+set undodir=~/.dotfiles/vim/undodir
+
 autocmd TerminalOpen * :resize 10
 set splitbelow
+
+set noshowmode
+set cmdheight=1
 
 set expandtab
 set tabstop=4
